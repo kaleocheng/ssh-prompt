@@ -1,0 +1,8 @@
+
+[[constraint]]
+  name = "github.com/c-bata/go-prompt"
+  version = "0.2.1"
+
+[prune]
+  go-tests = true
+  unused-packages = true
