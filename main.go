@@ -4,16 +4,11 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"strings"
 
 	prompt "github.com/c-bata/go-prompt"
 	"github.com/kaleocheng/sshconfig"
 )
-
-var promptSuggest []prompt.Suggest
-
-func completer(d prompt.Document) []prompt.Suggest {
-	return prompt.FilterHasPrefix(promptSuggest, d.GetWordBeforeCursor(), true)
-}
 
 func main() {
 	c, err := sshconfig.ParseSSHConfig("")
@@ -26,15 +21,7 @@ func main() {
 		hosts = append(hosts, item.Host...)
 	}
 
-	for _, h := range hosts {
-		s := prompt.Suggest{
-			Text: h,
-		}
-		promptSuggest = append(promptSuggest, s)
-	}
-
-	h := prompt.Input("host> ", completer)
-
+	h := strings.TrimSpace(prompt.Choose("host> ", hosts))
 	cmd := exec.Command("ssh", h)
 	cmd.Stdout = os.Stdout
 	cmd.Stdin = os.Stdin
