@@ -22,6 +22,10 @@ func main() {
 	}
 
 	h := strings.TrimSpace(prompt.Choose("host> ", hosts))
+	if h == "quit" || h == "exit" {
+		os.Exit(0)
+		return
+	}
 	cmd := exec.Command("ssh", h)
 	cmd.Stdout = os.Stdout
 	cmd.Stdin = os.Stdin
