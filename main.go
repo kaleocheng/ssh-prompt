@@ -11,7 +11,7 @@ import (
 )
 
 func main() {
-	c, err := sshconfig.ParseSSHConfig("")
+	c, err := sshconfig.ParseSSHConfig([]string{})
 	if err != nil {
 		fmt.Println(err)
 	}
