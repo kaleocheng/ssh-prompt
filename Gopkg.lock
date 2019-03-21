@@ -10,6 +10,14 @@
   version = "v0.2.3"
 
 [[projects]]
+  digest = "1:3569ef9147aa8c258a306facf2f62eaff98ee7a1acd52579b4bf9632f001386b"
+  name = "github.com/k0kubun/pp"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "1fdb803f401223aa9a9b7df66b7444d304f50bb0"
+  version = "v3.0.0"
+
+[[projects]]
   branch = "master"
   digest = "1:f7206fef7a518c0909aa86992196b30103524c739eff1931ae8d7ce704f712c8"
   name = "github.com/kaleocheng/sshconfig"
@@ -78,6 +86,7 @@
   analyzer-version = 1
   input-imports = [
     "github.com/c-bata/go-prompt",
+    "github.com/k0kubun/pp",
     "github.com/kaleocheng/sshconfig",
   ]
   solver-name = "gps-cdcl"
