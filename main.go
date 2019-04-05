@@ -3,12 +3,12 @@ package main
 import (
 	"flag"
 	"fmt"
+	"html/template"
 	"os"
 	"os/exec"
 	"strings"
 
 	prompt "github.com/c-bata/go-prompt"
-	"github.com/k0kubun/pp"
 	"github.com/kaleocheng/sshconfig"
 )
 
@@ -36,7 +36,16 @@ func main() {
 	}
 
 	if *showPtr {
-		pp.Print(m[h])
+		t := template.New("ssh config template")
+		t, _ = t.Parse(`Host {{ index .Host 0 }}{{ if .HostName }}
+  Hostname {{ .HostName }}{{ end }}{{ if .Port }}
+  Port {{ .Port }}{{ end }}{{ if .User }}
+  User {{ .User }}{{ end }}{{ if .ProxyCommand }}
+  ProxyCommand {{ .ProxyCommand }}{{ end }}{{ if .HostKeyAlgorithms }}
+  HostKeyAlgorithms {{ .HostKeyAlgorithms }}{{ end }}{{ if .IdentityFile }}
+  IdentityFile {{ .IdentityFile }}{{ end }}
+`)
+		t.Execute(os.Stdout, m[h])
 	} else {
 		cmd := exec.Command("ssh", h)
 		cmd.Stdout = os.Stdout
