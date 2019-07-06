@@ -4,12 +4,16 @@ import (
 	"flag"
 	"fmt"
 	"html/template"
+	"io/ioutil"
 	"os"
 	"os/exec"
+	"path/filepath"
+	"strconv"
 	"strings"
 
 	prompt "github.com/c-bata/go-prompt"
 	"github.com/kaleocheng/sshconfig"
+	homedir "github.com/mitchellh/go-homedir"
 )
 
 func main() {
@@ -47,10 +51,21 @@ func main() {
 `)
 		t.Execute(os.Stdout, m[h])
 	} else {
+		ppid := os.Getppid()
+		homePath, _ := homedir.Dir()
+		statusFile := filepath.Join(homePath, ".ssh", "status", strconv.Itoa(ppid))
+		err := ioutil.WriteFile(statusFile, []byte(h), 0755)
+		if err != nil {
+			fmt.Printf("Unable to write file: %v", err)
+		}
 		cmd := exec.Command("ssh", h)
 		cmd.Stdout = os.Stdout
 		cmd.Stdin = os.Stdin
 		cmd.Stderr = os.Stderr
 		cmd.Run()
+		err = os.Remove(statusFile)
+		if err != nil {
+			fmt.Printf("Unable to remove file: %v", err)
+		}
 	}
 }
