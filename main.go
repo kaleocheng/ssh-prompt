@@ -53,8 +53,13 @@ func main() {
 	} else {
 		ppid := os.Getppid()
 		homePath, _ := homedir.Dir()
-		statusFile := filepath.Join(homePath, ".ssh", "status", strconv.Itoa(ppid))
-		err := ioutil.WriteFile(statusFile, []byte(h), 0755)
+		statusPath := filepath.Join(homePath, ".ssh", "status")
+		err := os.MkdirAll(statusPath, os.ModePerm)
+		if err != nil {
+			fmt.Printf("Unable to create status file: %v", err)
+		}
+		statusFile := filepath.Join(statusPath, strconv.Itoa(ppid))
+		err = ioutil.WriteFile(statusFile, []byte(h), 0755)
 		if err != nil {
 			fmt.Printf("Unable to write file: %v", err)
 		}
