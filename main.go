@@ -18,6 +18,7 @@ import (
 
 func main() {
 	showPtr := flag.Bool("show", false, "show ssh config")
+	sshCommand := flag.String("command", "ssh", "the ssh command you want to use")
 	flag.Parse()
 
 	c, err := sshconfig.ParseSSHConfig([]string{})
@@ -63,7 +64,7 @@ func main() {
 		if err != nil {
 			fmt.Printf("Unable to write file: %v", err)
 		}
-		cmd := exec.Command("ssh", h)
+		cmd := exec.Command(*sshCommand, h)
 		cmd.Stdout = os.Stdout
 		cmd.Stdin = os.Stdin
 		cmd.Stderr = os.Stderr
