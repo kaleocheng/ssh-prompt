@@ -34,7 +34,16 @@ func main() {
 		m[item.Host[0]] = item
 	}
 
-	h := strings.TrimSpace(prompt.Choose("host> ", hosts))
+	s := []prompt.Suggest{}
+	for _, host := range hosts {
+		s = append(s, prompt.Suggest{Text: host})
+	}
+
+	completer := func(d prompt.Document) []prompt.Suggest {
+		return prompt.FilterFuzzy(s, d.GetWordBeforeCursorWithSpace(), true)
+	}
+
+	h := strings.TrimSpace(prompt.Input("host> ", completer))
 	if h == "quit" || h == "exit" {
 		os.Exit(0)
 		return
